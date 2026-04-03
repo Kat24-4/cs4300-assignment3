@@ -22,10 +22,10 @@ let noiseBool = 0;
 
 const mouse = sg.uniform( Mouse.values ),
       color = sg.uniform( Object.values( params.background ) ),
-      speed = sg.uniform( 2 ),
+      speed = sg.uniform( 3 ),
       frame = sg.uniform( 0 ),
       frequency = sg.uniform( 60 ),
-      amplitude = sg.uniform( 0.01 ),
+      amplitude = sg.uniform( 0.03 ),
       noise = sg.uniform( 0 )
 
 pane
@@ -34,7 +34,7 @@ pane
 
 pane.addBinding( speed, 'value', { min:0.2, max:5, label:'speed' })
 pane.addBinding( frequency, 'value', { min:10, max:80, label:'frequency'})
-pane.addBinding( amplitude, 'value', { min: 0.005, max:0.05, lable:'amplitude'})
+pane.addBinding( amplitude, 'value', { min: 0.005, max:0.05, label:'amplitude'})
 const noiseB = pane.addButton({ title:'off', label:'noise'})
 
 noiseB.on('click', () => {

@@ -7,7 +7,7 @@
 @group(0) @binding(6) var<uniform> frame: f32;
 @group(0) @binding(7) var<uniform> frequency: f32;
 @group(0) @binding(8) var<uniform> amplitude: f32;
-@group(0) @binding(9) var<uniform> noise: u32;
+@group(0) @binding(9) var<uniform> noiseFactor: u32;
 @group(1) @binding(0) var videoBuffer:    texture_external;
 
 @fragment 
@@ -19,26 +19,24 @@ fn fs( @builtin(position) pos : vec4f ) -> @location(0) vec4f {
   let time = frame / 60.;
 
   let noiseScale = 3.0;
-  let noise = perlinNoise2(p * noiseScale + vec2f(time * 0.1, time * 0.1));
+  let pnoise = perlinNoise2(p * noiseScale + vec2f(time * 0.1, time * 0.1));
 
-  var wave: f32 = 0; 
+  var wave = sin(dist * frequency - time * speed);
   // make ripple effect w/ sin
-  if (noise == 0) {
-    wave = sin(dist * frequency - time * speed);
-  } else {
-    wave = sin(dist * frequency - time * speed + noise * 2.0);
+  if (noiseFactor == 1) {
+    wave = sin(dist * frequency - time * speed + pnoise * 2.0);
   }
 
   // damping 
-  let damping = max(0., 1. - dist * 2.);
+  let damping = exp(-dist * 4.);
 
-  // distortion
+  //distortion
   let noisep = vec2f(perlinNoise2(p * 10.0 + vec2f(0.0, time * 0.1)), 
                      perlinNoise2(p * 10.0 + vec2f(5.0, time * 0.1))) * 0.005;
   let distortion = (p - m) * wave * amplitude * damping;
   var distortedp = p + distortion;
 
-  if (noise == 1) {
+  if (noiseFactor == 1) {
     distortedp = distortedp + noisep;
   }
 

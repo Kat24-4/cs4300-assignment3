@@ -13,7 +13,7 @@
 @fragment 
 fn fs( @builtin(position) pos : vec4f ) -> @location(0) vec4f {
   let p = pos.xy / resolution;
-  let m = mouse.xy / resolution;
+  let m = mouse.xy;
 
   let dist = distance(p, m);
   let time = frame / 60.;
